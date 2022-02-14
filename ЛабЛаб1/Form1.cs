@@ -202,6 +202,9 @@ namespace ЛабЛаб1
                     break;
 
                 case 2://секущих
+                    HideAll();
+                    textBoxX0.Visible=true;
+                    label4.Visible=true;
                     break;
 
                 case 3://итераций

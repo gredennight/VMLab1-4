@@ -14,6 +14,8 @@ namespace ЛабЛаб1
         public Form1()
         {
             InitializeComponent();
+            PrintGraphV2();
+            richTextBox1.Text+="\nПеред использованием стоит убедиться, что правильно задана функция и её производная в коде функций Function и FunctionShtih соответственно.";
         }
 
 
@@ -31,10 +33,10 @@ namespace ЛабЛаб1
         {
             textBox1.Visible = false;
             textBox2.Visible=false;
-            textBoxX0.Visible=false;
+            textBox3.Visible=false;
             label1.Visible=false;
             label2.Visible=false;
-            label4.Visible=false;
+            label3.Visible=false;
         }
         /// <summary>
         /// получить значение касательной
@@ -44,6 +46,16 @@ namespace ЛабЛаб1
         public double FunctionShtrih(double x)
         {
             return 4*Math.Pow(x,3)+6*Math.Pow(x,2)-1;
+        }
+
+        /// <summary>
+        /// рисует у=2х
+        /// </summary>
+        /// <param name="x"></param>
+        /// <returns></returns>
+        public double FunctionDebug(double x)
+        {
+            return (2*x);
         }
 
         /// <summary>
@@ -82,7 +94,115 @@ namespace ЛабЛаб1
                 x2=x1;
             }
         }
+        
+        public void PrintGraphV2()
+        {
+            Graphics screen;
+            screen=CreateGraphics();
+            screen.Clear(Color.White);
+            screen.DrawRectangle(Pens.Black, 0, 0, 300, 300);
+            //широта экрана вывода
+            int max = 300;
+            //диапазон вывода графика (от -zoom до zoom)
+            double zoom = Convert.ToDouble(trackBarZoom.Value);
+            //смещение графика по оси х
+            double moveX=Convert.ToDouble(-trackBarX.Value)/10;
+            //смещение графика по оси у
+            double moveY=Convert.ToDouble(-trackBarY.Value)/10;
+            //шаг в координатах для каждого нового пикселя
+            double step = (2*zoom)/max;
+            //начальные точки вывода графика
+            double sx = -zoom+moveX;
+            double sy = -zoom+moveY;
+            
+            //конечные точки вывода графика
+            double fx = zoom+moveX;
+            double fy = zoom+moveY;
+            //richTextBox1.Text+="\nmoveX:"+moveX+" moveY:"+moveY+" sx:"+sx+" sy:"+sy+" fx:"+fx+" fy:"+fy+" step:"+step;
+            //высота и широта в пикселях
+            int h = 0, w = 0;
+            //координаты
+            double x=0, y=0;
+            //точка на отрисовку
+            Point dot = new Point(0, 0);
+            Point dotPrev = new Point(0, 0);
+            //переменная ну короч это самое, тип если точку низя отрисовать, то она переключается и тип теперь эта точка не будет рисоваться
+            bool lostDot=false;
 
+
+            //получить значение координаты из пикселей с учитываемым смещением
+            double getX()
+            {
+                return (Convert.ToDouble( w)*step)+sx;
+            }
+
+            //получить из координаты значение в пикселях
+            int getHeight()
+            {
+                return Convert.ToInt32((y-moveY+zoom)/step);
+            }
+
+            //преобразовать координаты в пикселях в конченные координаты отрисовки
+            Point ConvertToDraw()
+            {
+                return new Point(w, max-h);
+            }
+
+            //тело цикла отрисовки
+            for(w=0; w < max; w++)
+            {
+                x = getX();
+                y=Function(x);
+                if(sy<=y && y<=fy)
+                {
+                    h=getHeight();
+                    dot = ConvertToDraw();
+                    if (lostDot)
+                    {
+                        dotPrev=dot;
+                    }
+                    lostDot=false;
+                    screen.DrawLine(Pens.Red,dotPrev,dot);
+                    dotPrev=dot;
+
+                }
+                else
+                {
+                    lostDot=true;
+                }
+                //richTextBox1.Text+="\nx:"+Math.Round( x,2)+" y:"+Math.Round(y, 2)+" w:"+w+" h:"+h;
+            }
+
+            x=0;y=0;
+            int vertical=0, horizontal=0;
+            Point point1=new Point(0,0);
+            Point point2=new Point(0,0);
+            //если вертикаль попадает в поле зрения
+            if(sx<=0 && fx>=0)
+            {
+                vertical=Convert.ToInt32((x-moveX+zoom)/step);
+                point1.X=vertical;point2.X=vertical;
+                point1.Y=0;point2.Y=max;
+                point1.Y=max-point1.Y;
+                point2.Y=max-point2.Y;
+                screen.DrawLine(Pens.Black,point1,point2);
+                
+            }
+            //если горизонталь попадает в поле зрения
+            if (sy<=0 && fy>=0)
+            {
+                horizontal=Convert.ToInt32((y-moveY+zoom)/step);
+                point1.Y=horizontal; point2.Y=horizontal;
+                point1.X=0; point2.X=max;
+                point1.Y=max-point1.Y;
+                point2.Y=max-point2.Y;
+                screen.DrawLine(Pens.Black, point1, point2);
+
+            }
+
+
+
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
@@ -91,7 +211,7 @@ namespace ЛабЛаб1
         //метод половинного деления
         private void Polovinki()
         {
-            PrintGraph();
+            PrintGraphV2();
             double a0 = Convert.ToDouble(textBox1.Text);
             double b0 = Convert.ToDouble(textBox2.Text);
             double E = Convert.ToDouble(textBox3.Text);
@@ -107,7 +227,7 @@ namespace ЛабЛаб1
                 double f3 = Function(b0);
 
                 //вывод в консоль
-                richTextBox1.Text+="\n№"+count+" a:"+Math.Round(a0, 4)+" b:"+Math.Round(b0, 4)+" F(a):"+Math.Round(f1, 4)+" F(c):"+Math.Round(f2, 4)+" F(b):"+Math.Round(f3, 4);
+                richTextBox1.Text+="\n№"+count+" a:"+Math.Round(a0, 4)+" b:"+Math.Round(b0, 4)+" c:"+c+" F(a):"+Math.Round(f1, 4)+" F(c):"+Math.Round(f2, 4)+" F(b):"+Math.Round(f3, 4);
 
                 //выбор интервала для следующей итерации
                 if (f1<0 && f2>0)
@@ -135,7 +255,7 @@ namespace ЛабЛаб1
         //метод ньютона
         private void Newton()
         {
-            double x0=Convert.ToDouble( textBoxX0.Text);
+            double x0=Convert.ToDouble( textBox1.Text);
             double x1 = x0;
             double E = Convert.ToDouble(textBox3.Text);
             do
@@ -151,6 +271,46 @@ namespace ЛабЛаб1
             while (Math.Abs(x1-x0)>E);
             richTextBox1.Text+="\nВ результате треша и экшена получаем, что х="+x1;
         }
+
+        //метод секущих
+        private void sekushie()
+        {
+            double x0 = Convert.ToDouble(textBox1.Text);
+            double x1 = Convert.ToDouble(textBox2.Text);
+            double x2 = 0;
+            double E = Convert.ToDouble(textBox3.Text);
+            do
+            {
+                double fx0 = Function(x0);
+                double fx1 = Function(x1);
+                x2=((x0*fx1)-(x1*fx0))/(fx1-fx0);
+                richTextBox1.Text+="\nx:"+Math.Round(x1,3)+" f(x):"+Math.Round(fx1,3);
+                x0=x1;
+                x1=x2;
+            }
+            while (Math.Abs(x1-x0)>E);
+            richTextBox1.Text+="\nВ результате треша и экшена получаем, что х="+x1;
+        }
+
+        //метод итераций
+        private void Iteration()
+        {
+            PrintGraphV2();
+            /*double x0 = Convert.ToDouble(textBox1.Text);
+            double E = Convert.ToDouble(textBox3.Text);
+            double lambda = 1/FunctionShtrih(x0);
+            double x1=x0,x2=0;
+            do
+            {
+                x2=x1-lambda*Function(x1);
+                richTextBox1.Text+="\nx2:"+x2+" f(x1):"+Function(x1);
+                x1=x2;
+            }
+            while (Math.Abs(x2-x1)>E);
+            richTextBox1.Text+="\nВ результате треша и экшена получаем, что х="+x2;
+
+            //x2=x1-lambda*function(x1);*/
+        }
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
 
@@ -158,7 +318,7 @@ namespace ЛабЛаб1
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            PrintGraph();
+            PrintGraphV2();
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -168,13 +328,13 @@ namespace ЛабЛаб1
 
         private void trackBarZoom_Scroll(object sender, EventArgs e)
         {
-            PrintGraph();
+            PrintGraphV2();
             ZoomText.Text=Convert.ToString( trackBarZoom.Value);
         }
 
         private void trackBarX_Scroll(object sender, EventArgs e)
         {
-            PrintGraph();
+            PrintGraphV2();
         }
 
         /// <summary>
@@ -188,6 +348,8 @@ namespace ЛабЛаб1
             {
                 case 0://половинного деления
                     HideAll();
+                    label1.Text="a0";
+                    label2.Text="b0";
                     textBox1.Visible = true;
                     textBox2.Visible=true;
                     textBox3.Visible=true;
@@ -197,17 +359,34 @@ namespace ЛабЛаб1
                     break;
                 case 1://ньютона
                     HideAll();
-                    textBoxX0.Visible=true;
-                    label4.Visible=true;
+                    label1.Text="x0";
+                    textBox1.Visible=true;
+                    label1.Visible = true;
+                    textBox3.Visible=true;
+                    label3.Visible = true;
                     break;
 
                 case 2://секущих
                     HideAll();
-                    textBoxX0.Visible=true;
-                    label4.Visible=true;
+                    label1.Text="x0";
+                    label2.Text="x1";
+
+                    textBox1.Visible=true;
+                    label1.Visible = true;
+                    textBox2.Visible=true;
+                    label2.Visible = true;
+                    textBox3.Visible=true;
+                    label3.Visible = true;
                     break;
 
                 case 3://итераций
+                    HideAll();
+                    label1.Text="x0";
+
+                    textBox1.Visible=true;
+                    label1.Visible = true;
+                    textBox3.Visible=true;
+                    label3.Visible = true;
                     break;
             }
         }
@@ -228,9 +407,11 @@ namespace ЛабЛаб1
                     break;
 
                 case 2://секущих
+                    sekushie();
                     break;
 
                 case 3://итераций
+                    Iteration();
                     break;
             }
         }

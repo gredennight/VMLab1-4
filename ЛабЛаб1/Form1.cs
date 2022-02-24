@@ -28,7 +28,7 @@ namespace ЛабЛаб1
             return Math.Pow(x,4)+2*Math.Pow(x,3)-x-1;
         }
         /// <summary>
-        /// спрятать все доп элементы
+        /// спрятать все доп элементы на форме
         /// </summary>
         void HideAll()
         {
@@ -52,57 +52,19 @@ namespace ЛабЛаб1
         }
 
         /// <summary>
-        /// рисует у=2х
+        /// крутая отрисовка графика, на вход засовывать функцию получения у для х
         /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
-        public double FunctionDebug(double x)
-        {
-            return (2*x);
-        }
-
-        /// <summary>
-        /// отрисовка графика
-        /// </summary>
-        /*public void PrintGraph()
-        {
-            Graphics screen;
-            screen=CreateGraphics();
-            screen.Clear(Color.White);
-            int max = 300;
-            int x1=0, y1=0, x2=0, y2=0;
-            double zoom =Convert.ToDouble( trackBarZoom.Value);
-            ///на вход идёт значение х в пикселях, на выход - у тоже в пикселях
-            int GetY(int x)
-            {
-                double mashtab = max/(zoom*2);
-                double realX = (x/mashtab)-zoom;
-                double realY = Function(realX);
-                double y = (realY+zoom)*mashtab;
-
-                return Convert.ToInt32(max-y);
-            }
-            ///отрисовка координат
-            screen.DrawLine(Pens.Black, max/2, 0, max/2, max);
-            screen.DrawLine(Pens.Black, 0, max/2, max, max/2);
-
-
-            ///отрисовка графика
-            for (int i = 0; i < max; i++)
-            {
-                y1 =GetY(i);
-                x1=i;
-                screen.DrawLine(Pens.Red, x1, y1, x2, y2);
-                y2=y1;
-                x2=x1;
-            }
-        }*/
-        
+        /// <param name="GetY"></param>
         public void PrintGraphV2(Func<double,double>GetY)
         {
+            //тут идёт такая дичь, что лучше чекнуть записи в блокноте...
+
+
+            //всякая всячина для рисования
             Graphics screen;
             screen=CreateGraphics();
             screen.Clear(Color.White);
+            //рисуем рамку чёрного цвета двадцатого века
             screen.DrawRectangle(Pens.Black, 0, 0, 300, 300);
             //широта экрана вывода
             int max = 300;
@@ -176,6 +138,8 @@ namespace ЛабЛаб1
                 //richTextBox1.Text+="\nx:"+Math.Round( x,2)+" y:"+Math.Round(y, 2)+" w:"+w+" h:"+h;
             }
 
+
+            //отрисовка осей
             x=0;y=0;
             int vertical=0, horizontal=0;
             Point point1=new Point(0,0);
@@ -207,7 +171,7 @@ namespace ЛабЛаб1
 
         }
 
-        
+        //очистка консоли
         private void button1_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
@@ -325,11 +289,8 @@ namespace ЛабЛаб1
 
             //x2=x1-lambda*function(x1);*/
         }
-        private void textBox5_TextChanged(object sender, EventArgs e)
-        {
 
-        }
-
+        //всякие ползунки
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
             switch (comboBox1.SelectedIndex)
@@ -344,7 +305,7 @@ namespace ЛабЛаб1
             }
         }
 
-        
+        //интерполяция кубическим сплайном
         public void Kubik()
         {
             List<List<double>> coords = new List<List<double>>();
@@ -358,6 +319,8 @@ namespace ЛабЛаб1
 
 
             int mas = coords.Count+1;
+
+            //поиск высот h
             List<double> h = new List<double>(mas);
             h.Add(0);
             for (int i = 1; i<coords.Count; i++)
@@ -365,6 +328,8 @@ namespace ЛабЛаб1
                 h.Add(coords[i][0]-coords[i-1][0]);
                 Console.WriteLine(h[i]+"    "+i);
             }
+
+            //перевод h в u (хз зачем я это сделал, но пусть будет)
             List<double> u = new List<double>(mas);
             u.Add(-9080889);
             u.Add(-9080889);
@@ -374,6 +339,8 @@ namespace ЛабЛаб1
                 u.Add(h[i]);
                 Console.WriteLine(u[i]+"    "+i);
             }
+
+            //определение v из h
             List<double> v = new List<double>(mas);
             Console.WriteLine("\n");
             v.Add(-98142);
@@ -384,6 +351,8 @@ namespace ЛабЛаб1
                 Console.WriteLine(v[i]+"    "+i);
 
             }
+
+            //определение w, которые так-то прост h с задержкой в развитии
             List<double> w = new List<double>(mas);
             w.Add(-9080889);
             w.Add(-9080889);
@@ -394,6 +363,8 @@ namespace ЛабЛаб1
                 Console.WriteLine(w[i]+"    "+i);
 
             }
+
+            //определение F из y и h
             List<double> F = new List<double>(mas);
             F.Add(-9080889);
             F.Add(-9080889);
@@ -405,8 +376,7 @@ namespace ЛабЛаб1
 
             }
 
-
-
+            //определение коефа а
             List<double> a = new List<double>(mas);
             a.Add(-9080889);
             Console.WriteLine("\n");
@@ -416,6 +386,8 @@ namespace ЛабЛаб1
                 Console.WriteLine(a[i]+"    "+i);
 
             }
+
+            //определение недоматриц А
             List<double> A = new List<double>(mas);
             A.Add(0);
             A.Add(0);
@@ -428,6 +400,8 @@ namespace ЛабЛаб1
                 Console.WriteLine(A[i]+"    "+i);
 
             }
+
+            //определение недоматриц В
             List<double> B = new List<double>(mas);
             B.Add(0);
             B.Add(0);
@@ -440,6 +414,8 @@ namespace ЛабЛаб1
                 Console.WriteLine(B[i]+"    "+i);
 
             }
+
+            //определение коефа с
             List<double> c = new List<double>(mas);
             for (int i = 0; i<=coords.Count; i++)
             {
@@ -451,6 +427,8 @@ namespace ЛабЛаб1
             {
                 c[i]=A[i]*c[i+1]+B[i];
             }
+
+            //а теперь внезапно определение коефа b
             List<double> b = new List<double>(mas);
             for (int i = 0; i<=coords.Count; i++)
             {
@@ -461,6 +439,8 @@ namespace ЛабЛаб1
                 b[i]=((1/h[i])*(coords[i][1]-coords[i-1][1]))-((1.0/3.0)*((2*c[i])+c[i+1])*h[i]);
                 //Console.WriteLine("\nb"+i+"     ci:"+c[i]+" ci+1:"+c[i+1]+"   hi:"+h[i]+"   sjfasf "+(((2*c[i])+c[i+1])*h[i])*(1.0/3.0) +" а вместе:"+((1/3)*((2*c[i])+c[i+1])*h[i]));
             }
+
+            //ну и почему бы и да, определение коефа d
             List<double> d = new List<double>(mas);
             for (int i = 0; i<=coords.Count; i++)
             {
@@ -470,8 +450,12 @@ namespace ЛабЛаб1
             {
                 d[i]=(c[i+1]-c[i])/(3*h[i]);
             }
+
+            //преобразование полученных массивов в функцию кубического сплайна
+            //на вход кидаешь х, а получаешь у
             double Kubaster(double x)
             {
+                //смотрим к какому промежутку принадлежит х
                 int i = 1;
 
                 for (int n = 0; n<coords.Count; n++)
@@ -483,6 +467,8 @@ namespace ЛабЛаб1
                     }
 
                 }
+
+                //если он вне промежутка то прост рисуем прямую
                 if (x>=coords[coords.Count-1][0])
                 {
                     return 0;
@@ -491,29 +477,25 @@ namespace ЛабЛаб1
                 {
                     return 0;
                 }
-                //временная мера
-                //i=1;
-                return (a[i]+b[i]*(x-coords[i-1][0])+c[i]*Math.Pow((x-coords[i-1][0]), 3)+d[i]*Math.Pow((x-coords[i-1][0]), 3));
+
+                //выводим у для х, узнав нужные для этого коефы
+                return (a[i]+b[i]*(x-coords[i-1][0])+c[i]*Math.Pow((x-coords[i-1][0]), 2)+d[i]*Math.Pow((x-coords[i-1][0]), 3));
             }
-            /*
-            //вывод коефов
+            
+            //вывод коефов в консольку
             for(int i = 1; i<coords.Count; i++)
             {
                 string xtemp = "(x-"+Convert.ToString(Math.Round(coords[i-1][0], 3))+")";
                 richTextBox1.Text+="\nu"+i+"="+Math.Round(a[i], 3)+"+"+Math.Round(b[i], 3)+xtemp+"+"+Math.Round(c[i], 3)+xtemp+"^2+"+Math.Round(d[i], 3)+xtemp+"^3";
             }
-            */
 
+            //рисование графика
             PrintGraphV2(Kubaster);
 
 
         }
 
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        //крутилка масштаба
         private void trackBarZoom_Scroll(object sender, EventArgs e)
         {
             ZoomText.Text=Convert.ToString( trackBarZoom.Value);
@@ -530,6 +512,7 @@ namespace ЛабЛаб1
             }
         }
 
+        //крутилка по иксам
         private void trackBarX_Scroll(object sender, EventArgs e)
         {
             switch (comboBox1.SelectedIndex)

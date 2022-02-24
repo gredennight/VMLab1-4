@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 namespace ЛабЛаб1
 {
     public partial class Form1 : Form
@@ -15,9 +16,15 @@ namespace ЛабЛаб1
         {
             InitializeComponent();
             PrintGraphV2(Function);
+            List<List<double>> xy = new List<List<double>>();
             richTextBox1.Text+="\nПеред использованием стоит убедиться, что правильно задана функция и её производная в коде функций Function и FunctionShtih соответственно.";
         }
 
+        /// <summary>
+        /// массив из координат, первая позиция х, вторая - у
+        /// </summary>
+        public List<List<double>> coordinates =new List<List<double>>();
+       
 
         /// <summary>
         /// получить у для заданого х
@@ -627,6 +634,36 @@ namespace ЛабЛаб1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+        }
+        /// <summary>
+        /// тип это самое, попытка считать данные из текстового файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonOpenFile_Click(object sender, EventArgs e)
+        {
+            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //openFileDialog1.FileName; от так вот можно получить путь к файлу
+                coordinates.Clear();
+                string input = File.ReadAllText(openFileDialog1.FileName);
+                int i = 0, j = 0;
+
+                //считывание файла в массив
+                foreach(var row in input.Split('\n'))
+                {
+                    j=0;
+                    coordinates.Add(new List<double> {0,0});
+                    foreach(var col in row.Trim().Split(' '))
+                    {
+                        coordinates[i][j]=int.Parse(col.Trim());
+                        j++;
+                    }
+                    i++;
+                }
+
+                //добавь сюда сортировку массива по иксам, пж
+            }
 
         }
     }

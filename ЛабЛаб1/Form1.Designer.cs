@@ -177,7 +177,8 @@
             "Ньютона",
             "секущих",
             "простой итерации",
-            "интерполяция"});
+            "интерполяция",
+            "тест"});
             this.comboBox1.Location = new System.Drawing.Point(777, 54);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(158, 24);
@@ -209,6 +210,7 @@
             this.buttonOpenFile.TabIndex = 20;
             this.buttonOpenFile.Text = "открыть файл";
             this.buttonOpenFile.UseVisualStyleBackColor = true;
+            this.buttonOpenFile.Click += new System.EventHandler(this.buttonOpenFile_Click);
             // 
             // Form1
             // 

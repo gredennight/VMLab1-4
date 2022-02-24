@@ -14,7 +14,7 @@ namespace ЛабЛаб1
         public Form1()
         {
             InitializeComponent();
-            PrintGraphV2();
+            PrintGraphV2(Function);
             richTextBox1.Text+="\nПеред использованием стоит убедиться, что правильно задана функция и её производная в коде функций Function и FunctionShtih соответственно.";
         }
 
@@ -24,6 +24,7 @@ namespace ЛабЛаб1
         /// </summary>
         public double Function(double x)
         {
+            //return Math.Pow(x, 5)-x-1;
             return Math.Pow(x,4)+2*Math.Pow(x,3)-x-1;
         }
         /// <summary>
@@ -37,6 +38,7 @@ namespace ЛабЛаб1
             label1.Visible=false;
             label2.Visible=false;
             label3.Visible=false;
+            buttonOpenFile.Visible=false;
         }
         /// <summary>
         /// получить значение касательной
@@ -45,6 +47,7 @@ namespace ЛабЛаб1
         /// <returns></returns>
         public double FunctionShtrih(double x)
         {
+            //return 5*Math.Pow(x, 4)-1;
             return 4*Math.Pow(x,3)+6*Math.Pow(x,2)-1;
         }
 
@@ -61,7 +64,7 @@ namespace ЛабЛаб1
         /// <summary>
         /// отрисовка графика
         /// </summary>
-        public void PrintGraph()
+        /*public void PrintGraph()
         {
             Graphics screen;
             screen=CreateGraphics();
@@ -93,9 +96,9 @@ namespace ЛабЛаб1
                 y2=y1;
                 x2=x1;
             }
-        }
+        }*/
         
-        public void PrintGraphV2()
+        public void PrintGraphV2(Func<double,double>GetY)
         {
             Graphics screen;
             screen=CreateGraphics();
@@ -152,7 +155,7 @@ namespace ЛабЛаб1
             for(w=0; w < max; w++)
             {
                 x = getX();
-                y=Function(x);
+                y=GetY(x);
                 if(sy<=y && y<=fy)
                 {
                     h=getHeight();
@@ -203,6 +206,8 @@ namespace ЛабЛаб1
 
 
         }
+
+        
         private void button1_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
@@ -211,7 +216,7 @@ namespace ЛабЛаб1
         //метод половинного деления
         private void Polovinki()
         {
-            PrintGraphV2();
+            PrintGraphV2(Function);
             double a0 = Convert.ToDouble(textBox1.Text);
             double b0 = Convert.ToDouble(textBox2.Text);
             double E = Convert.ToDouble(textBox3.Text);
@@ -219,18 +224,18 @@ namespace ЛабЛаб1
 
             richTextBox1.Text+="итерация а b f1 f2 f3";
 
-            while (Math.Abs(b0-a0)>2*E)
+            while (Math.Abs(b0-a0)>2*E)//проверка условия окончания
             {
-                double c = (a0+ b0)/2;
-                double f1 = Function(a0);
-                double f2 = Function(c);
-                double f3 = Function(b0);
+                double c = (a0+ b0)/2;//среднее значение границ
+                double f1 = Function(a0);// функция левой границы
+                double fc = Function(c);//функция середины
+                double f2 = Function(b0);//функция правой границы
 
                 //вывод в консоль
-                richTextBox1.Text+="\n№"+count+" a:"+Math.Round(a0, 4)+" b:"+Math.Round(b0, 4)+" c:"+c+" F(a):"+Math.Round(f1, 4)+" F(c):"+Math.Round(f2, 4)+" F(b):"+Math.Round(f3, 4);
+                richTextBox1.Text+="\n№"+count+" a:"+Math.Round(a0, 3)+" b:"+Math.Round(b0, 3)+" c:"+Math.Round(c, 3)+" F(a):"+Math.Round(f1, 3)+" F(c):"+Math.Round(fc, 3)+" F(b):"+Math.Round(f2, 3);
 
                 //выбор интервала для следующей итерации
-                if (f1<0 && f2>0)
+                if (f1*fc<0)//выбирается левый интервал
                 {
                     double a1 = a0;
                     double b1 = c;
@@ -238,7 +243,7 @@ namespace ЛабЛаб1
                     b0=b1;
 
                 }
-                else
+                else//правый
                 {
                     double a1 = c;
                     double b1 = b0;
@@ -249,7 +254,8 @@ namespace ЛабЛаб1
                 count++;
 
             }
-            richTextBox1.Text+="\nВ результате треша и экшена получаем, что х="+(a0+b0)/2;
+            //в конце выводится значение х
+            richTextBox1.Text+="\nх="+(a0+b0)/2;
         }
 
         //метод ньютона
@@ -263,13 +269,14 @@ namespace ЛабЛаб1
                 x0 = x1;
                 double f = Function(x0);
                 double F = FunctionShtrih(x0);
-                x1=x0-(f/F);
+                double fF = -f/F;
+                x1=x0+fF;
                 //вставить сюда вывод значений
-                richTextBox1.Text+="\nx0:"+Math.Round(x0, 3)+" x1:"+Math.Round(x1, 3)+" f:"+Math.Round(f, 3)+" F:"+Math.Round(F, 3);
+                richTextBox1.Text+="\nx0:"+Math.Round(x0, 3)+" x1:"+Math.Round(x1, 3)+" f:"+Math.Round(f, 3)+" F:"+Math.Round(F, 3)+" -f/F:"+fF;
 
             }
             while (Math.Abs(x1-x0)>E);
-            richTextBox1.Text+="\nВ результате треша и экшена получаем, что х="+x1;
+            richTextBox1.Text+="\nх="+x1;
         }
 
         //метод секущих
@@ -284,30 +291,37 @@ namespace ЛабЛаб1
                 double fx0 = Function(x0);
                 double fx1 = Function(x1);
                 x2=((x0*fx1)-(x1*fx0))/(fx1-fx0);
-                richTextBox1.Text+="\nx:"+Math.Round(x1,3)+" f(x):"+Math.Round(fx1,3);
+                richTextBox1.Text+="\nx:"+Math.Round(x1,3)+" f(x):"+fx1;
                 x0=x1;
                 x1=x2;
             }
             while (Math.Abs(x1-x0)>E);
-            richTextBox1.Text+="\nВ результате треша и экшена получаем, что х="+x1;
+            richTextBox1.Text+="\nх="+x1;
         }
 
         //метод итераций
         private void Iteration()
         {
-            PrintGraphV2();
-            /*double x0 = Convert.ToDouble(textBox1.Text);
+            PrintGraphV2(Function);
+            double Fx0 = FunctionShtrih(Convert.ToDouble(textBox1.Text));
+            double lambda = 1/Fx0;
+            double x0 = Convert.ToDouble(textBox1.Text), x1 = 0, xtemp = x0 ;
+            //x0=0;
             double E = Convert.ToDouble(textBox3.Text);
-            double lambda = 1/FunctionShtrih(x0);
-            double x1=x0,x2=0;
+            int count = 0;
             do
             {
-                x2=x1-lambda*Function(x1);
-                richTextBox1.Text+="\nx2:"+x2+" f(x1):"+Function(x1);
-                x1=x2;
+                x0=xtemp;
+                double u= x0-lambda*Function(x0);
+                x1=u;
+                richTextBox1.Text+="\n№:"+count+ " x:"+Math.Round( x0,3)+" u(x):"+Math.Round(u, 3);
+                xtemp = x1;
+                count++;
             }
-            while (Math.Abs(x2-x1)>E);
-            richTextBox1.Text+="\nВ результате треша и экшена получаем, что х="+x2;
+            while (Math.Abs(x1-x0)>E);
+
+            
+            richTextBox1.Text+="\nх="+Math.Round(x1, 3);
 
             //x2=x1-lambda*function(x1);*/
         }
@@ -318,7 +332,181 @@ namespace ЛабЛаб1
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            PrintGraphV2();
+            switch (comboBox1.SelectedIndex)
+            {
+                
+                case 4:
+                    Kubik();
+                    break;
+                default://всё остальнре
+                    PrintGraphV2(Function);
+                    break;
+            }
+        }
+
+        
+        public void Kubik()
+        {
+            List<List<double>> coords = new List<List<double>>();
+            //вставить сюда получение данных в массив
+            coords.Add(new List<double> { 0, 1 });
+            coords.Add(new List<double> { 1.5, 2.52 });
+            coords.Add(new List<double> { 4.0, 4.16 });
+            coords.Add(new List<double> { 5.2, 3.2 });
+            coords.Add(new List<double> { 7.0, 5.1 });
+            coords.Add(new List<double> { 9.3, 6.2 });
+
+
+            int mas = coords.Count+1;
+            List<double> h = new List<double>(mas);
+            h.Add(0);
+            for (int i = 1; i<coords.Count; i++)
+            {
+                h.Add(coords[i][0]-coords[i-1][0]);
+                Console.WriteLine(h[i]+"    "+i);
+            }
+            List<double> u = new List<double>(mas);
+            u.Add(-9080889);
+            u.Add(-9080889);
+            Console.WriteLine("\n");
+            for (int i = 2; i<coords.Count; i++)
+            {
+                u.Add(h[i]);
+                Console.WriteLine(u[i]+"    "+i);
+            }
+            List<double> v = new List<double>(mas);
+            Console.WriteLine("\n");
+            v.Add(-98142);
+            v.Add(-98142);
+            for (int i = 2; i<coords.Count; i++)
+            {
+                v.Add(-2*(h[i-1]+h[i]));
+                Console.WriteLine(v[i]+"    "+i);
+
+            }
+            List<double> w = new List<double>(mas);
+            w.Add(-9080889);
+            w.Add(-9080889);
+            Console.WriteLine("\n");
+            for (int i = 2; i<coords.Count; i++)
+            {
+                w.Add(h[i-1]);
+                Console.WriteLine(w[i]+"    "+i);
+
+            }
+            List<double> F = new List<double>(mas);
+            F.Add(-9080889);
+            F.Add(-9080889);
+            Console.WriteLine("\n");
+            for (int i = 2; i<coords.Count; i++)
+            {
+                F.Add(3*(((coords[i][1]-coords[i-1][1])/h[i])-((coords[i-1][1]-coords[i-2][1])/h[i-1])));
+                Console.WriteLine(F[i]+"    "+i);
+
+            }
+
+
+
+            List<double> a = new List<double>(mas);
+            a.Add(-9080889);
+            Console.WriteLine("\n");
+            for (int i = 1; i<coords.Count; i++)
+            {
+                a.Add(coords[i-1][1]);
+                Console.WriteLine(a[i]+"    "+i);
+
+            }
+            List<double> A = new List<double>(mas);
+            A.Add(0);
+            A.Add(0);
+            A.Add(u[2]/v[2]);
+
+            Console.WriteLine("\n");
+            for (int i = 3; i<coords.Count; i++)
+            {
+                A.Add(u[i]/(v[i]-w[i]*A[i-1]));
+                Console.WriteLine(A[i]+"    "+i);
+
+            }
+            List<double> B = new List<double>(mas);
+            B.Add(0);
+            B.Add(0);
+            B.Add(-F[2]/v[2]);
+
+            Console.WriteLine("\n");
+            for (int i = 3; i<coords.Count; i++)
+            {
+                B.Add(((w[i]*B[i-1])-F[i])/(v[i]-(w[i]*A[i-1])));
+                Console.WriteLine(B[i]+"    "+i);
+
+            }
+            List<double> c = new List<double>(mas);
+            for (int i = 0; i<=coords.Count; i++)
+            {
+                c.Add(08348130591);
+            }
+            c[mas-1]=0;
+            c[1]=0;
+            for (int i = c.Count-2; i>1; i--)
+            {
+                c[i]=A[i]*c[i+1]+B[i];
+            }
+            List<double> b = new List<double>(mas);
+            for (int i = 0; i<=coords.Count; i++)
+            {
+                b.Add(0);
+            }
+            for (int i = 1; i<b.Count-1; i++)
+            {
+                b[i]=((1/h[i])*(coords[i][1]-coords[i-1][1]))-((1.0/3.0)*((2*c[i])+c[i+1])*h[i]);
+                //Console.WriteLine("\nb"+i+"     ci:"+c[i]+" ci+1:"+c[i+1]+"   hi:"+h[i]+"   sjfasf "+(((2*c[i])+c[i+1])*h[i])*(1.0/3.0) +" а вместе:"+((1/3)*((2*c[i])+c[i+1])*h[i]));
+            }
+            List<double> d = new List<double>(mas);
+            for (int i = 0; i<=coords.Count; i++)
+            {
+                d.Add(0);
+            }
+            for (int i = 1; i<d.Count-1; i++)
+            {
+                d[i]=(c[i+1]-c[i])/(3*h[i]);
+            }
+            double Kubaster(double x)
+            {
+                int i = 1;
+
+                for (int n = 0; n<coords.Count; n++)
+                {
+
+                    if (x>=coords[n][0] && x<coords[coords.Count-1][0])
+                    {
+                        i=n+1;
+                    }
+
+                }
+                if (x>=coords[coords.Count-1][0])
+                {
+                    return 0;
+                }
+                if (x<coords[0][0])
+                {
+                    return 0;
+                }
+                //временная мера
+                //i=1;
+                return (a[i]+b[i]*(x-coords[i-1][0])+c[i]*Math.Pow((x-coords[i-1][0]), 3)+d[i]*Math.Pow((x-coords[i-1][0]), 3));
+            }
+            /*
+            //вывод коефов
+            for(int i = 1; i<coords.Count; i++)
+            {
+                string xtemp = "(x-"+Convert.ToString(Math.Round(coords[i-1][0], 3))+")";
+                richTextBox1.Text+="\nu"+i+"="+Math.Round(a[i], 3)+"+"+Math.Round(b[i], 3)+xtemp+"+"+Math.Round(c[i], 3)+xtemp+"^2+"+Math.Round(d[i], 3)+xtemp+"^3";
+            }
+            */
+
+            PrintGraphV2(Kubaster);
+
+
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -328,13 +516,32 @@ namespace ЛабЛаб1
 
         private void trackBarZoom_Scroll(object sender, EventArgs e)
         {
-            PrintGraphV2();
             ZoomText.Text=Convert.ToString( trackBarZoom.Value);
+            PrintGraphV2(Function);
+            switch (comboBox1.SelectedIndex)
+            {
+                
+                case 4:
+                    Kubik();
+                    break;
+                default://всё остальнре
+                    PrintGraphV2(Function);
+                    break;
+            }
         }
 
         private void trackBarX_Scroll(object sender, EventArgs e)
         {
-            PrintGraphV2();
+            switch (comboBox1.SelectedIndex)
+            {
+                
+                case 4:
+                    Kubik();
+                    break;
+                default://всё остальнре
+                    PrintGraphV2(Function);
+                    break;
+            }
         }
 
         /// <summary>
@@ -388,6 +595,13 @@ namespace ЛабЛаб1
                     textBox3.Visible=true;
                     label3.Visible = true;
                     break;
+                case 4://интерчтототамянеспал20часовнихуянепонимаю
+                    HideAll();
+                    break;
+                case 5://заготовка на чёт ещё
+                    HideAll();
+                    buttonOpenFile.Visible=true;
+                    break;
             }
         }
         /// <summary>
@@ -403,7 +617,11 @@ namespace ЛабЛаб1
                     Polovinki();
                     break;
                 case 1://ньютона
-                    Newton();
+                    if(Convert.ToDouble(textBox1.Text)!=0)
+                    {
+                        Newton();
+
+                    }
                     break;
 
                 case 2://секущих
@@ -413,7 +631,20 @@ namespace ЛабЛаб1
                 case 3://итераций
                     Iteration();
                     break;
+                case 4://интерполяция сплайном
+                    Kubik();
+                    break;
+                
+                default://всё остальнре
+                    PrintGraphV2(Function);
+                    richTextBox1.Text+="\nВыберите метод.";
+                    break;
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

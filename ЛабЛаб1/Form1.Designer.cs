@@ -43,6 +43,8 @@
             this.ZoomText = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.Compute = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.buttonOpenFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarZoom)).BeginInit();
@@ -86,7 +88,7 @@
             // 
             this.richTextBox1.Location = new System.Drawing.Point(467, 90);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(468, 318);
+            this.richTextBox1.Size = new System.Drawing.Size(844, 318);
             this.richTextBox1.TabIndex = 4;
             this.richTextBox1.Text = "";
             // 
@@ -129,7 +131,7 @@
             // 
             // trackBarY
             // 
-            this.trackBarY.Location = new System.Drawing.Point(405, 12);
+            this.trackBarY.Location = new System.Drawing.Point(405, -5);
             this.trackBarY.Maximum = 50;
             this.trackBarY.Minimum = -50;
             this.trackBarY.Name = "trackBarY";
@@ -141,7 +143,7 @@
             // 
             // trackBarX
             // 
-            this.trackBarX.Location = new System.Drawing.Point(12, 382);
+            this.trackBarX.Location = new System.Drawing.Point(10, 382);
             this.trackBarX.Maximum = 50;
             this.trackBarX.Minimum = -50;
             this.trackBarX.Name = "trackBarX";
@@ -175,7 +177,8 @@
             "половинный",
             "Ньютона",
             "секущих",
-            "простой итерации"});
+            "простой итерации",
+            "интерполяция"});
             this.comboBox1.Location = new System.Drawing.Point(777, 54);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(158, 24);
@@ -192,11 +195,28 @@
             this.Compute.UseVisualStyleBackColor = true;
             this.Compute.Click += new System.EventHandler(this.Compute_Click);
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            this.openFileDialog1.FilterIndex = 2;
+            this.openFileDialog1.InitialDirectory = "c:\\\\";
+            // 
+            // buttonOpenFile
+            // 
+            this.buttonOpenFile.Location = new System.Drawing.Point(941, 54);
+            this.buttonOpenFile.Name = "buttonOpenFile";
+            this.buttonOpenFile.Size = new System.Drawing.Size(103, 22);
+            this.buttonOpenFile.TabIndex = 20;
+            this.buttonOpenFile.Text = "открыть файл";
+            this.buttonOpenFile.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(947, 450);
+            this.ClientSize = new System.Drawing.Size(1323, 450);
+            this.Controls.Add(this.buttonOpenFile);
             this.Controls.Add(this.Compute);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.ZoomText);
@@ -213,7 +233,8 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "лаб 1-3";
+            this.Text = "Курсовая Пережогин";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBarY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarZoom)).EndInit();
@@ -239,6 +260,8 @@
         private System.Windows.Forms.Label ZoomText;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button Compute;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button buttonOpenFile;
     }
 }
 

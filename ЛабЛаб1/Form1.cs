@@ -15,6 +15,7 @@ namespace ЛабЛаб1
         public Form1()
         {
             InitializeComponent();
+            HideAll();
             PrintGraphV2(Function);
             List<List<double>> xy = new List<List<double>>();
             richTextBox1.Text+="\nПеред использованием стоит убедиться, что правильно задана функция и её производная в коде функций Function и FunctionShtih соответственно.";
@@ -160,6 +161,12 @@ namespace ЛабЛаб1
                 point1.Y=max-point1.Y;
                 point2.Y=max-point2.Y;
                 screen.DrawLine(Pens.Black,point1,point2);
+                //отрисовка шкал
+                for(int i=0; i < max; i+=max/10)
+                {
+                    screen.DrawLine(Pens.Black, vertical-5,i,vertical+5,i);
+                    screen.DrawString(Convert.ToString(Math.Round((Convert.ToDouble(i)*step+sy),2)), new Font("Arial", 8), new SolidBrush(Color.Black), vertical, i-12);
+                }
                 
             }
             //если горизонталь попадает в поле зрения
@@ -171,6 +178,13 @@ namespace ЛабЛаб1
                 point1.Y=max-point1.Y;
                 point2.Y=max-point2.Y;
                 screen.DrawLine(Pens.Black, point1, point2);
+                //отрисовка шкал
+                for (int i = 0; i < max; i+=max/10)
+                {
+                    screen.DrawLine(Pens.Black, i, max-horizontal-5, i, max-horizontal+5);
+                    screen.DrawString(Convert.ToString(Math.Round((Convert.ToDouble(i)*step+sx), 2)), new Font("Arial", 8), new SolidBrush(Color.Black), i, max-horizontal-12);
+
+                }
 
             }
 
@@ -315,7 +329,9 @@ namespace ЛабЛаб1
         //интерполяция кубическим сплайном
         public void Kubik()
         {
-            List<List<double>> coords = new List<List<double>>();
+            List<List<double>> coords = coordinates;
+            //List<List<double>> coords = new List<List<double>>();
+            /*
             //вставить сюда получение данных в массив
             coords.Add(new List<double> { 0, 1 });
             coords.Add(new List<double> { 1.5, 2.52 });
@@ -323,7 +339,7 @@ namespace ЛабЛаб1
             coords.Add(new List<double> { 5.2, 3.2 });
             coords.Add(new List<double> { 7.0, 5.1 });
             coords.Add(new List<double> { 9.3, 6.2 });
-
+            */
 
             int mas = coords.Count+1;
 
@@ -490,6 +506,7 @@ namespace ЛабЛаб1
             }
             
             //вывод коефов в консольку
+            richTextBox1.Clear();
             for(int i = 1; i<coords.Count; i++)
             {
                 string xtemp = "(x-"+Convert.ToString(Math.Round(coords[i-1][0], 3))+")";
@@ -587,6 +604,7 @@ namespace ЛабЛаб1
                     break;
                 case 4://интерчтототамянеспал20часовнихуянепонимаю
                     HideAll();
+                    buttonOpenFile.Visible=true;
                     break;
                 case 5://заготовка на чёт ещё
                     HideAll();
@@ -656,13 +674,16 @@ namespace ЛабЛаб1
                     coordinates.Add(new List<double> {0,0});
                     foreach(var col in row.Trim().Split(' '))
                     {
-                        coordinates[i][j]=int.Parse(col.Trim());
+                        //coordinates[i][j]=double.Parse(col.Trim());
+                        coordinates[i][j]=Convert.ToDouble(col.Replace(".",","));//оно может преобразовать ток 2,2, так что даём возможность заменить 2.2
                         j++;
                     }
                     i++;
                 }
 
                 //добавь сюда сортировку массива по иксам, пж
+                //coordinates.Sort();//пахпахпаыхвп лул, ну ты хотя бы пытался :D
+                //coordinates = coordinates.OrderBy(x => x.Count > 1 ? x[1] : null).ToList();
             }
 
         }

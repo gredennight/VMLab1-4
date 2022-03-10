@@ -183,6 +183,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(158, 24);
             this.comboBox1.TabIndex = 16;
+            this.comboBox1.Text = "выберите метод";
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // Compute
@@ -234,7 +235,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Курсовая Пережогин";
+            this.Text = "Русня пидорасы";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBarY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarX)).EndInit();

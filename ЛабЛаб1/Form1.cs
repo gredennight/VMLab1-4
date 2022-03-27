@@ -240,7 +240,7 @@ namespace ЛабЛаб1
 
             }
             //в конце выводится значение х
-            richTextBox1.Text+="\nх="+(a0+b0)/2;
+            richTextBox1.Text+="\nх="+Math.Round( (a0+b0)/2,3);
         }
 
         //метод ньютона
@@ -257,11 +257,11 @@ namespace ЛабЛаб1
                 double fF = -f/F;
                 x1=x0+fF;
                 //вставить сюда вывод значений
-                richTextBox1.Text+="\nx0:"+Math.Round(x0, 3)+" x1:"+Math.Round(x1, 3)+" f:"+Math.Round(f, 3)+" F:"+Math.Round(F, 3)+" -f/F:"+fF;
+                richTextBox1.Text+="\nx0:"+Math.Round(x0, 3)+" f:"+Math.Round(f, 3)+" F:"+Math.Round(F, 3)+" -f/F:"+Math.Round( fF,3);
 
             }
             while (Math.Abs(x1-x0)>E);
-            richTextBox1.Text+="\nх="+x1;
+            richTextBox1.Text+="\nх="+Math.Round( x1,3);
         }
 
         //метод секущих
@@ -276,12 +276,12 @@ namespace ЛабЛаб1
                 double fx0 = Function(x0);
                 double fx1 = Function(x1);
                 x2=((x0*fx1)-(x1*fx0))/(fx1-fx0);
-                richTextBox1.Text+="\nx:"+Math.Round(x1,3)+" f(x):"+fx1;
+                richTextBox1.Text+="\nx:"+Math.Round(x1,3)+" f(x):"+Math.Round( fx1,3);
                 x0=x1;
                 x1=x2;
             }
             while (Math.Abs(x1-x0)>E);
-            richTextBox1.Text+="\nх="+x1;
+            richTextBox1.Text+="\nх="+Math.Round(x1, 3);
         }
 
         //метод итераций
@@ -685,6 +685,11 @@ namespace ЛабЛаб1
                 //coordinates.Sort();//пахпахпаыхвп лул, ну ты хотя бы пытался :D
                 //coordinates = coordinates.OrderBy(x => x.Count > 1 ? x[1] : null).ToList();
             }
+
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
 
         }
     }

@@ -89,14 +89,14 @@
             // 
             this.richTextBox1.Location = new System.Drawing.Point(467, 90);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(844, 318);
+            this.richTextBox1.Size = new System.Drawing.Size(462, 738);
             this.richTextBox1.TabIndex = 4;
             this.richTextBox1.Text = "";
             this.richTextBox1.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(662, 414);
+            this.button1.Location = new System.Drawing.Point(150, 444);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(103, 33);
             this.button1.TabIndex = 5;
@@ -181,7 +181,7 @@
             "простой итерации",
             "интерполяция",
             "тест"});
-            this.comboBox1.Location = new System.Drawing.Point(777, 54);
+            this.comboBox1.Location = new System.Drawing.Point(771, 65);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(158, 24);
             this.comboBox1.TabIndex = 16;
@@ -207,9 +207,9 @@
             // 
             // buttonOpenFile
             // 
-            this.buttonOpenFile.Location = new System.Drawing.Point(941, 54);
+            this.buttonOpenFile.Location = new System.Drawing.Point(556, 65);
             this.buttonOpenFile.Name = "buttonOpenFile";
-            this.buttonOpenFile.Size = new System.Drawing.Size(103, 22);
+            this.buttonOpenFile.Size = new System.Drawing.Size(103, 24);
             this.buttonOpenFile.TabIndex = 20;
             this.buttonOpenFile.Text = "открыть файл";
             this.buttonOpenFile.UseVisualStyleBackColor = true;
@@ -219,7 +219,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1323, 450);
+            this.ClientSize = new System.Drawing.Size(937, 840);
             this.Controls.Add(this.buttonOpenFile);
             this.Controls.Add(this.Compute);
             this.Controls.Add(this.comboBox1);

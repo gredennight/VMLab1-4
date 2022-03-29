@@ -44,6 +44,11 @@ namespace ЛабЛаб1
             textBox2.Visible=false;
             textBox3.Visible=false;
             label1.Visible=false;
+            label1.Text = "a0";
+            label2.Text = "b0";
+            label3.Text = "Точность";
+
+
             label2.Visible=false;
             label3.Visible=false;
             buttonOpenFile.Visible=false;
@@ -340,7 +345,14 @@ namespace ЛабЛаб1
             coords.Add(new List<double> { 7.0, 5.1 });
             coords.Add(new List<double> { 9.3, 6.2 });
             */
+            //вывод координат в консоль
+            richTextBox1.Clear();
+            richTextBox1.Text += "\nX:\tY:\n";
+            for (int i = 0; i < coordinates.Count; i++)
+            {
+                richTextBox1.Text += coordinates[i][0] + "\t" + coordinates[i][1] + "\n";
 
+            }
             int mas = coords.Count+1;
 
             //поиск высот h
@@ -446,9 +458,17 @@ namespace ЛабЛаб1
             }
             c[mas-1]=0;
             c[1]=0;
+            richTextBox1.Text += "\nИсходная трёхдиагональная система\n";
             for (int i = c.Count-2; i>1; i--)
             {
                 c[i]=A[i]*c[i+1]+B[i];
+                richTextBox1.Text += "c[" + i + "]=A[" + i + "]*c[" + (i + 1) + "]+B[" + i + "]\n";
+            }
+            richTextBox1.Text += "\n\nсистема с известными коефами\n";
+            for (int i = c.Count - 2; i > 1; i--)
+            {
+                c[i] = A[i] * c[i + 1] + B[i];
+                richTextBox1.Text += "c[" + i + "]="+Math.Round( A[i],3)+"*c[" + (i + 1) + "]+"+Math.Round(B[i],3)+"\n";
             }
 
             //а теперь внезапно определение коефа b
@@ -506,13 +526,16 @@ namespace ЛабЛаб1
             }
             
             //вывод коефов в консольку
-            richTextBox1.Clear();
+            richTextBox1.Text+="\n\nУравнения для отрезков";
             for(int i = 1; i<coords.Count; i++)
             {
                 string xtemp = "(x-"+Convert.ToString(Math.Round(coords[i-1][0], 3))+")";
                 richTextBox1.Text+="\nu"+i+"="+Math.Round(a[i], 3)+"+"+Math.Round(b[i], 3)+xtemp+"+"+Math.Round(c[i], 3)+xtemp+"^2+"+Math.Round(d[i], 3)+xtemp+"^3";
             }
 
+            //вывод i в консоль
+            double i_temp=Convert.ToDouble(textBox1.Text);
+            richTextBox1.Text += "\n\nu(i)="+Math.Round(Kubaster(i_temp),3);
             //рисование графика
             PrintGraphV2(Kubaster);
 
@@ -604,6 +627,9 @@ namespace ЛабЛаб1
                     break;
                 case 4://интерчтототамянеспал20часовнихуянепонимаю
                     HideAll();
+                    textBox1.Visible = true;
+                    label1.Visible = true;
+                    label1.Text = "i";
                     buttonOpenFile.Visible=true;
                     break;
                 case 5://заготовка на чёт ещё
@@ -668,7 +694,7 @@ namespace ЛабЛаб1
                 int i = 0, j = 0;
 
                 //считывание файла в массив
-                foreach(var row in input.Split('\n'))
+                foreach (var row in input.Split('\n'))
                 {
                     j=0;
                     coordinates.Add(new List<double> {0,0});
@@ -680,6 +706,9 @@ namespace ЛабЛаб1
                     }
                     i++;
                 }
+                
+
+
 
                 //добавь сюда сортировку массива по иксам, пж
                 //coordinates.Sort();//пахпахпаыхвп лул, ну ты хотя бы пытался :D
